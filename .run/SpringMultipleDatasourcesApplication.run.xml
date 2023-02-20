@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SpringMultipleDatasourcesApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <module name="SpringMultipleDatasources.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="br.com.neto.springmultipledatasources.SpringMultipleDatasourcesApplication" />
+    <option name="VM_PARAMETERS" value="-DXXXlogging.level.web=DEBUG -DisThreadContextMapInheritable=true" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
