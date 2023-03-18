@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 class MultithreadTest {
@@ -52,7 +52,7 @@ class MultithreadTest {
     @Test
     void bTest() {
         // Create a list of elements to process
-        List<String> list = new ArrayList<>();
+        final List<String> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             list.add("Element " + i);
         }
@@ -60,29 +60,71 @@ class MultithreadTest {
         // Define the number of threads to use
         int numThreads = 3;
 
-        ForkJoinPool myPool = new ForkJoinPool(3);
+        try (ForkJoinPool myPool = new ForkJoinPool(numThreads)) {
 
-        myPool.submit(() -> {
-            list.parallelStream().forEach(element -> {
-                sleep();
+            myPool.submit(() -> list.parallelStream().forEach(element -> {
+                sleepBetweenOneAndTwoSeconds(element);
                 LOG.info("Thread " + Thread.currentThread().threadId() + " processed element " + element);
-            });
-        });
+            }));
 
-        // Shut down the executor and wait for all tasks to complete
-        myPool.shutdown();
-        while (!myPool.isTerminated()) {
-            Thread.yield();
+            // Shut down the executor and wait for all tasks to complete
+            myPool.shutdown();
+            while (!myPool.isTerminated()) {
+                Thread.yield();
+            }
+        }
+
+        // Print a message indicating that all processing is complete
+        LOG.info("All processing is complete.");
+    }
+    
+    @Test
+    void testExceptions() {
+        final List<String> list = new ArrayList<>() {{
+            for (int i = 0; i < 20; i++) {
+                add("Element " + i);
+            }
+        }};
+
+        // Define the number of threads to use
+        int numThreads = 3;
+
+        try (ForkJoinPool myPool = new ForkJoinPool(numThreads)) {
+
+            ForkJoinTask<?> submit = myPool.submit(() -> list.parallelStream().forEach(element -> {
+
+                if (element.contains("1") || element.contains("2")) {
+                    throw new RuntimeException("Exceção no " + element);
+                }
+
+                sleepBetweenOneAndTwoSeconds(element);
+
+                LOG.info("Thread " + Thread.currentThread().threadId() + " processed element " + element);
+
+            }));
+
+            submit.get(1, TimeUnit.HOURS);
+
+            Assertions.fail("Should have thrown a RuntimeException");
+
+            myPool.shutdown();
+
+            while (!myPool.isTerminated()) {
+                Thread.yield();
+            }
+
+        } catch (ExecutionException | InterruptedException | TimeoutException e) {
+            LOG.error(e.getMessage(), e);
         }
 
         // Print a message indicating that all processing is complete
         LOG.info("All processing is complete.");
     }
 
-    private static void sleep() {
+    private static void sleepBetweenOneAndTwoSeconds(String element) {
         try {
             int randomNumber = new Random().nextInt(1000) + 1000;
-            LOG.info("Sleeping for {} ms", randomNumber);
+            LOG.info("{} - Sleeping for {} ms", element, randomNumber);
             Thread.sleep(randomNumber);
         } catch (InterruptedException ignore) {
         }

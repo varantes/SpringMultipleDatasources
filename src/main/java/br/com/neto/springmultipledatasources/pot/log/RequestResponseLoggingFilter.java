@@ -1,4 +1,4 @@
-package br.com.neto.springmultipledatasources.pot;
+package br.com.neto.springmultipledatasources.pot.log;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

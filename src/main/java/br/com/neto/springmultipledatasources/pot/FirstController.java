@@ -25,7 +25,7 @@ public class FirstController {
 
     @GetMapping
     public String hi() {
-        return "Now it's " + Instant.now();
+        return firstService.hi("Val");
     }
 
     @GetMapping("thread")

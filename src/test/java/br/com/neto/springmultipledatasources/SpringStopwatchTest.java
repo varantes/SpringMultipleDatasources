@@ -1,6 +1,6 @@
 package br.com.neto.springmultipledatasources;
 
-import br.com.neto.springmultipledatasources.pot.LogCollector;
+import br.com.neto.springmultipledatasources.pot.log.LogCollector;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;

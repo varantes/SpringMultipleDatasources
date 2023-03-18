@@ -1,4 +1,4 @@
-package br.com.neto.springmultipledatasources.pot;
+package br.com.neto.springmultipledatasources.pot.log;
 
 import org.springframework.util.StopWatch;
 import org.springframework.util.StringUtils;

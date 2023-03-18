@@ -1,4 +1,4 @@
-package br.com.neto.springmultipledatasources.pot;
+package br.com.neto.springmultipledatasources.pot.log;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
